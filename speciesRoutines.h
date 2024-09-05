@@ -6,7 +6,7 @@
 #include <string.h>
 #include <math.h>
 
-#define DEBUG 0
+#define DEBUG 1
 #define NAME_SIZE 41
 #define SCIENTIFIC_SIZE 61
 #define STATUS_SIZE 9

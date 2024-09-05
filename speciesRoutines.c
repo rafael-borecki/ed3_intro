@@ -15,7 +15,7 @@ void registerSpecies(FILE *file){
   if(DEBUG == 1) printf("STATS: ");
   readline(temp_species.status);
   if(DEBUG == 1) printf("XY: ");
-  scanf("%.2f %.2f", &temp_species.location[0], &temp_species.location[1]);
+  scanf("%f %f", &temp_species.location[0], &temp_species.location[1]);
   if(DEBUG == 1) printf("HI: ");
   scanf("%d", &temp_species.human_impact);
 
