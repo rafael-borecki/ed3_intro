@@ -16,7 +16,8 @@ int main(){
 							int n;
 							scanf("%d", &n);
 							FILE* file = fopen(filename, "wb");
-							if (file == NULL){
+							if (!file){
+								printf("Falha no processamento do arquivo");
 								return EXIT_FAILURE;
 							}
 							for (int i = 0; i < n; i++){
@@ -28,7 +29,8 @@ int main(){
 
 		case(2):{
 							FILE* file = fopen(filename, "rb");
-							if (file == NULL){
+							if (!file){
+								printf("Falha no processamento do arquivo");
 								return EXIT_FAILURE;
 							}
 							reportSpecies(file);
@@ -38,7 +40,8 @@ int main(){
 
 		case(3):{
 							FILE* file = fopen(filename, "rb");
-							if (file == NULL){
+							if (!file){
+								printf("Falha no processamento do arquivo");
 								return EXIT_FAILURE;
 							}
 							searchSpecies(file);
@@ -50,7 +53,8 @@ int main(){
 							int n,species_id;
 							scanf("%d", &n);
 							FILE* file = fopen(filename, "wb");
-							if (file == NULL){
+							if (!file){
+								printf("Falha no processamento do arquivo");
 								return EXIT_FAILURE;
 							}
 							for (int i = 0; i < n; i++){
