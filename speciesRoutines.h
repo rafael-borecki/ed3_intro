@@ -1,10 +1,16 @@
 #ifndef __SPECIES_ROUTINES__
 #define __SPECIES_ROUTINES__
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
 #define DEBUG 0
 #define NAME_SIZE 41
 #define SCIENTIFIC_SIZE 61
 #define STATUS_SIZE 9
+#define FILLER '$'
 
 typedef struct {
     int species_id;

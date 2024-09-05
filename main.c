@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "./funcoesFornecidas.c"
-#include "./speciesRoutines.c"
+#include "./funcoesFornecidas.h"
+#include "./speciesRoutines.h"
 
 int main(){
 	int command;
@@ -33,7 +33,9 @@ int main(){
 								printf("Falha no processamento do arquivo");
 								return EXIT_FAILURE;
 							}
-							reportSpecies(file);
+							while(!feof(file)){
+								reportSpecies(file);
+							}
 							fclose(file);
 							break;
 						}
@@ -46,7 +48,7 @@ int main(){
 							}
 							searchSpecies(file);
 							fclose(file);
-								break;
+							break;
 						}
 
 		case(4):{
