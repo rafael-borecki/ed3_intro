@@ -23,6 +23,7 @@ int main(){
 							for (int i = 0; i < n; i++){
 								registerSpecies(file);
 							}
+							binarioNaTela(filename);
 							fclose(file);
 							break;
 						}
