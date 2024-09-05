@@ -13,13 +13,13 @@
 #define FILLER '$'
 
 typedef struct {
-    int species_id;
-    char name[NAME_SIZE];
-    char scientific_name[SCIENTIFIC_SIZE];
-    int population;
-    char status[STATUS_SIZE];
-    float location[2];
-    int human_impact;
+  int species_id;
+  char name[NAME_SIZE];
+  char scientific_name[SCIENTIFIC_SIZE];
+  int population;
+  char status[STATUS_SIZE];
+  float location[2];
+  int human_impact;
 } Species;
 
 void registerSpecies(FILE *file);
