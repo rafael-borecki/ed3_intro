@@ -27,10 +27,10 @@ void reportSpecies(FILE *file){
   //fflush(stdout);
   Species temp_species;
   fread(&temp_species.species_id, sizeof(int), 1, file);
-  fread(temp_species.name, sizeof(char), NAME_SIZE, file);
-  fread(temp_species.scientific_name, sizeof(char), SCIENTIFIC_SIZE, file);
+  fread(temp_species.name, NAME_SIZE * sizeof(char), 1, file);
+  fread(temp_species.scientific_name, SCIENTIFIC_SIZE * sizeof(char), 1, file);
   fread(&temp_species.population, sizeof(int), 1, file);
-  fread(temp_species.status, sizeof(char), STATUS_SIZE, file);
+  fread(temp_species.status, STATUS_SIZE * sizeof(char), 1, file);
   fread(&temp_species.location, sizeof(float), 2, file);
   fread(&temp_species.human_impact, sizeof(int), 1, file);
 
@@ -130,7 +130,7 @@ void registerInfoSpecies(FILE *file){
   int hi=-1, population=-1;
   char status[STATUS_SIZE];
   memset(&status, '$', STATUS_SIZE);
-  int dado_inserido = 0;
+
   while(ttl_changes--){
     if(DEBUG == 1) printf("INSTRUCTION: ");
     readline(instruction);
@@ -152,8 +152,7 @@ void registerInfoSpecies(FILE *file){
 		  }
 		  strcpy(temp_species.status,status);
 		}
-
-		if(strcmp(temp_species.status,"NULO") != 0){
+		else{
 		  if(DEBUG == 1) printf("cur_status: %s\n", temp_species.status);
 		  printf("Informação já inserida no arquivo\n");
 		}
@@ -191,12 +190,7 @@ void registerInfoSpecies(FILE *file){
     else{
       fwrite(&temp_species.population,sizeof(int),1,file);
     }
-    //if(status[19]){
-      //fwrite(&status,STATUS_SIZE*sizeof(char),1,file);
-    //}
-//    else{
-      fwrite(&temp_species.status,STATUS_SIZE*sizeof(char),1,file);
-  //  }
+    fwrite(&temp_species.status,STATUS_SIZE*sizeof(char),1,file);
     fwrite(&temp_species.location[0],sizeof(float),1,file);
     fwrite(&temp_species.location[1],sizeof(float),1,file);
     if(hi != -1){
