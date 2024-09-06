@@ -9,8 +9,8 @@ int main(){
   char filename[30];
   scanf("%d", &command);
   //char dump_space = getchar();
-  //readline(filename);
-  scanf("%d %s", &command, filename);
+  //readline(filename);	
+  scanf("%d %s", &command, filename);	//RUNCODES
   scanf("%d %s", &command, filename);
   setbuf(stdin, NULL);
 
