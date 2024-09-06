@@ -5,6 +5,8 @@
 #include "./speciesRoutines.h"
 
 int main(){
+  fflush(stdout);
+  if(DEBUG) printf("DEBUG IS ACTIVE\n");
   int command;
   char filename[30];
   scanf("%d", &command);
@@ -23,6 +25,9 @@ int main(){
 	      for (int i = 0; i < n; i++){
 		registerSpecies(file);
 	      }
+	      fclose(file);
+
+	      file = fopen(filename, "rb");
 	      binarioNaTela(filename);
 	      fclose(file);
 	      break;
