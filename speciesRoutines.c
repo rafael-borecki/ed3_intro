@@ -4,7 +4,7 @@
 void registerSpecies(FILE *file){
   Species temp_species;
   memset(&temp_species, '$', sizeof(temp_species));
-  
+
   scanf("%d", &temp_species.species_id);
   readline(temp_species.name);
   readline(temp_species.scientific_name);
@@ -56,7 +56,7 @@ void searchSpecies(FILE *file){
   fseek(file, 0, SEEK_END);
   int max_jump = ftell(file) / jump_size;
   fseek(file, 0, SEEK_SET);
-  
+
   if(rrn > max_jump){
     printf("Espécie não encontrada");
     return;
@@ -90,13 +90,13 @@ void searchSpecies(FILE *file){
 
 void registerInfoSpecies(FILE *file){ 
   Species temp_species;
-
-  int jump_size = sizeof(temp_species.species_id) + sizeof(temp_species.name) + sizeof(temp_species.scientific_name) + sizeof(temp_species.population) + sizeof(temp_species.status) + sizeof(temp_species.location) + sizeof(temp_species.human_impact);
   
+  int jump_size = sizeof(temp_species.species_id) + sizeof(temp_species.name) + sizeof(temp_species.scientific_name) + sizeof(temp_species.population) + sizeof(temp_species.status) + sizeof(temp_species.location) + sizeof(temp_species.human_impact);
+
   int target_id;
   if(DEBUG == 1) printf("TARGET_ID: ");
   scanf("%d", &target_id);
-  
+
   fread(&temp_species.species_id, sizeof(int), 1, file);
   fread(temp_species.name, NAME_SIZE * sizeof(char), 1, file);
   fread(temp_species.scientific_name, SCIENTIFIC_SIZE * sizeof(char), 1, file);
@@ -115,6 +115,11 @@ void registerInfoSpecies(FILE *file){
     fread(&temp_species.human_impact, sizeof(int), 1, file);
   }
   if(DEBUG == 1) printf("TEMP_SPECIES_ID: %d", temp_species.species_id);
+  
+  if(temp_species.species_id != target_id){
+    printf("Espécie não encontrada\n");
+    return;
+  }
 
   int ttl_changes;
   if(DEBUG == 1) printf("\nTTL_CHANGES: ");
@@ -122,8 +127,10 @@ void registerInfoSpecies(FILE *file){
 
   char instruction[20];
   int instruction_cmd;
-  int hi, population;
+  int hi=-1, population=-1;
   char status[STATUS_SIZE];
+  memset(&status, '$', STATUS_SIZE);
+  int dado_inserido = 0;
   while(ttl_changes--){
     if(DEBUG == 1) printf("INSTRUCTION: ");
     readline(instruction);
@@ -138,33 +145,65 @@ void registerInfoSpecies(FILE *file){
     }
     switch(instruction_cmd){
       case(1):{
-		if(DEBUG == 1) printf("status: ");
-		readline(status);
+		if(strcmp(temp_species.status,"NULO") == 0){
+		  readline(status);
+		  if(DEBUG == 1){ printf("cur_status: %s\n", temp_species.status);
+		    printf("%s", status);
+		  }
+		  strcpy(temp_species.status,status);
+		}
+
+		if(strcmp(temp_species.status,"NULO") != 0){
+		  if(DEBUG == 1) printf("cur_status: %s\n", temp_species.status);
+		  printf("Informação já inserida no arquivo\n");
+		}
 		break;
 	      }
 
       case(2):{
 		if(DEBUG == 1) printf("hi: ");
-		scanf("%d", &hi);
+		if(!temp_species.human_impact){
+		  scanf("%d", &hi);
+		}
+		else{printf("Informação já inserida no arquivo\n");}
 		break;
 	      }
 
       case(3):{
 		if(DEBUG == 1) printf("population: ");
-		scanf("%d", &population);
+		if(!temp_species.population){
+		  scanf("%d", &population);
+		}
+		else{printf("Informação já inserida no arquivo\n");}
 		break;
 	      }    
     }
 
     int current_pos = ftell(file);
     fseek(file, current_pos - jump_size, SEEK_SET);
+
     fwrite(&temp_species.species_id,sizeof(int),1,file);
     fwrite(&temp_species.name,NAME_SIZE*sizeof(char),1,file);
     fwrite(&temp_species.scientific_name,SCIENTIFIC_SIZE*sizeof(char),1,file);
-    fwrite(&population,sizeof(int),1,file);
-    fwrite(&status,STATUS_SIZE*sizeof(char),1,file);
+    if(population != -1){
+      fwrite(&population,sizeof(int),1,file);
+    }
+    else{
+      fwrite(&temp_species.population,sizeof(int),1,file);
+    }
+    //if(status[19]){
+      //fwrite(&status,STATUS_SIZE*sizeof(char),1,file);
+    //}
+//    else{
+      fwrite(&temp_species.status,STATUS_SIZE*sizeof(char),1,file);
+  //  }
     fwrite(&temp_species.location[0],sizeof(float),1,file);
     fwrite(&temp_species.location[1],sizeof(float),1,file);
-    fwrite(&hi,sizeof(int),1,file);
+    if(hi != -1){
+      fwrite(&hi,sizeof(int),1,file);
+    }
+    else{
+      fwrite(&temp_species.human_impact,sizeof(int),1,file);
+    }
   }
 };	
