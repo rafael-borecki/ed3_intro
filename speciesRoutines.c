@@ -31,7 +31,7 @@ void registerSpecies(FILE *file){
 };
 
 void reportSpecies(FILE *file){
-  fflush(stdout);
+  //fflush(stdout);
   Species temp_species;
   fread(&temp_species.species_id, sizeof(int), 1, file);
   fread(temp_species.name, sizeof(char), NAME_SIZE, file);

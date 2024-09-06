@@ -5,7 +5,7 @@
 #include "./speciesRoutines.h"
 
 int main(){
-  fflush(stdout);
+  //fflush(stdout);
   if(DEBUG) printf("DEBUG IS ACTIVE\n");
   int command;
   char filename[30];
@@ -28,6 +28,10 @@ int main(){
 	      fclose(file);
 
 	      file = fopen(filename, "rb");
+	      if (!file){
+		printf("Falha no processamento do arquivo");
+		return EXIT_FAILURE;
+	      }
 	      binarioNaTela(filename);
 	      fclose(file);
 	      break;

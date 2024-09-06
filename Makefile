@@ -1,9 +1,14 @@
 TARGET=main
-FUNC=funcoesFornecidas.c
-SPEC=speciesRoutines.c
 LD=gcc
-OBJ=main.c
-all: main.c
-	$(LD) $(OBJ) $(FUNC) $(SPEC) -o $(TARGET) 
+SRC=main.c speciesRoutines.c funcoesFornecidas.c
+
+all: $(TARGET)
+
+$(TARGET): $(SRC)
+	$(CC) -o $(TARGET) $(SRC)
+
+clean:
+	rm -f $(TARGET)
+
 run: $(TARGET)
 	./$(TARGET)
