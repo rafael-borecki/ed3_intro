@@ -39,8 +39,16 @@ int main(){
 		printf("Falha no processamento do arquivo");
 		return EXIT_FAILURE;
 	      }
-	      while(!feof(file)){
+
+	      fseek(file,0,SEEK_END);
+	      int file_end = ftell(file);
+	      fseek(file,0,SEEK_SET);
+
+	      while(file_end - ftell(file) > 60){
 		reportSpecies(file);
+		if(file_end - ftell(file) > 60){
+		  printf("\n");
+		}
 	      }
 	      fclose(file);
 	      break;

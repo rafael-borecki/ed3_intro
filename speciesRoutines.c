@@ -1,20 +1,6 @@
 #include "./speciesRoutines.h"
 #include "./funcoesFornecidas.h"
 
-char *fillBlank(char str[]){
-  int flag = 0;
-  for (int i = 0; i < sizeof(*str); i++){
-    if (flag){
-      str[i] = '$';
-    }
-    else if (str[i] = '\n'){
-      str[i] = '\0';
-    }
-  }
-  if(DEBUG == 1) printf("STR: %s", str);
-  return str;
-}
-
 void registerSpecies(FILE *file){
   Species temp_species;
   memset(&temp_species, '$', sizeof(temp_species));
@@ -23,15 +9,12 @@ void registerSpecies(FILE *file){
   scanf("%d", &temp_species.species_id);
   if(DEBUG == 1) printf("NAME: ");
   readline(temp_species.name);
-  //strcpy(temp_species.name,fillBlank(temp_species.name));
   if(DEBUG == 1) printf("SNAME: ");
   readline(temp_species.scientific_name);
-  //strcpy(temp_species.status,fillBlank(temp_species.scientific_name));
   if(DEBUG == 1) printf("POP: ");
   scanf("%d", &temp_species.population);
   if(DEBUG == 1) printf("STATS: ");
   readline(temp_species.status);
-  //strcpy(temp_species.status,fillBlank(temp_species.status));
   if(DEBUG == 1) printf("XY: ");
   scanf("%f %f", &temp_species.location[0], &temp_species.location[1]);
   if(DEBUG == 1) printf("HI: ");
@@ -48,6 +31,7 @@ void registerSpecies(FILE *file){
 };
 
 void reportSpecies(FILE *file){
+  fflush(stdout);
   Species temp_species;
   fread(&temp_species.species_id, sizeof(int), 1, file);
   fread(temp_species.name, sizeof(char), NAME_SIZE, file);
@@ -57,39 +41,45 @@ void reportSpecies(FILE *file){
   fread(&temp_species.location, sizeof(float), 2, file);
   fread(&temp_species.human_impact, sizeof(int), 1, file);
 
-  printf("ID:%d\n",temp_species.species_id);
-  printf("Nome:%s\n",temp_species.name);
-  printf("Nome Científico:%s\n",temp_species.scientific_name);
-  printf("População:%d\n",temp_species.population);
-  printf("Status:%s\n",temp_species.status);
-  printf("Localização:(%.2f %.2f)\n",temp_species.location[0],temp_species.location[1]);
-  printf("Impacto Humano:%d\n\n",temp_species.human_impact);
+  printf("ID: %d\n",temp_species.species_id);
+  printf("Nome: %s\n",temp_species.name);
+  printf("Nome Científico: %s\n",temp_species.scientific_name);
 
+  if(temp_species.population)
+    printf("População: %d\n",temp_species.population);
+  else printf("População: NULO\n");
+
+  printf("Status: %s\n",temp_species.status);
+  printf("Localização: (%.2f, %.2f)\n",temp_species.location[0],temp_species.location[1]);
+
+  if (temp_species.human_impact)
+    printf("Impacto Humano: %d\n",temp_species.human_impact);
+  else printf("Impacto Humano: NULO\n");
 };
 
 void searchSpecies(FILE *file){
   Species temp_species;
-  
+
   int rrn;
   scanf("%d", &rrn);
-  
+
   if(fseek(file, rrn * sizeof(temp_species), SEEK_SET) != 0) {
     printf("Espécie não encontrada\n");
     return;
   }
-  
-//if(fread(&temp_species, sizeof(temp_species), 1, file) != 1) {
-//  printf("Espécie não encontrada\n");
-//  return;
-//}
+
+  //if(fread(&temp_species, sizeof(temp_species), 1, file) != 1) {
+  //  printf("Espécie não encontrada\n");
+  //  return;
+  //}
 
   fread(&temp_species.species_id, sizeof(int), 1, file);
   fread(temp_species.name, NAME_SIZE * sizeof(char), 1, file);
   fread(temp_species.scientific_name, SCIENTIFIC_SIZE * sizeof(char), 1, file);
   fread(&temp_species.population, sizeof(int), 1, file);
   fread(temp_species.status, STATUS_SIZE * sizeof(char), 1, file);
-//fread(&temp_species.location[0], sizeof(float), 1, file);
-//fread(&temp_species.location[1], sizeof(float), 1, file);
+  //fread(&temp_species.location[0], sizeof(float), 1, file);
+  //fread(&temp_species.location[1], sizeof(float), 1, file);
   fread(&temp_species.location, sizeof(float), 2, file);
   fread(&temp_species.human_impact, sizeof(int), 1, file);
 
