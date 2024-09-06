@@ -71,16 +71,20 @@ int main(){
 	    }
 
     case(4):{
-	      int n,species_id;
-	      scanf("%d", &n);
-	      FILE* file = fopen(filename, "wb");
+	      FILE* file = fopen(filename, "rb+");
 	      if (!file){
 		printf("Falha no processamento do arquivo");
 		return EXIT_FAILURE;
 	      }
-	      for (int i = 0; i < n; i++){
-		registerInfoSpecies(file);
+	      registerInfoSpecies(file);
+	      fclose(file);
+
+	      file = fopen(filename, "rb");
+	      if (!file){
+		printf("Falha no processamento do arquivo");
+		return EXIT_FAILURE;
 	      }
+	      binarioNaTela(filename);
 	      fclose(file);
 	      break;
 	    }

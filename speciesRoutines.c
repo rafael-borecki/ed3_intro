@@ -5,19 +5,12 @@ void registerSpecies(FILE *file){
   Species temp_species;
   memset(&temp_species, '$', sizeof(temp_species));
   
-  if(DEBUG == 1) printf("ID: ");
   scanf("%d", &temp_species.species_id);
-  if(DEBUG == 1) printf("NAME: ");
   readline(temp_species.name);
-  if(DEBUG == 1) printf("SNAME: ");
   readline(temp_species.scientific_name);
-  if(DEBUG == 1) printf("POP: ");
   scanf("%d", &temp_species.population);
-  if(DEBUG == 1) printf("STATS: ");
   readline(temp_species.status);
-  if(DEBUG == 1) printf("XY: ");
   scanf("%f %f", &temp_species.location[0], &temp_species.location[1]);
-  if(DEBUG == 1) printf("HI: ");
   scanf("%d", &temp_species.human_impact);
 
   fwrite(&temp_species.species_id,sizeof(int),1,file);
@@ -74,12 +67,6 @@ void searchSpecies(FILE *file){
     return;
   }
 
-  //if (DEBUG == 1) printf("\nSIZEOF STRUCT: %d\n", sizeof(temp_species));
-  //if(fread(&temp_species, sizeof(temp_species), 1, file) != 1) {
-  // printf("Espécie não encontrada\n");
-  //  return;
-  //}
-
   fread(&temp_species.species_id, sizeof(int), 1, file);
   fread(temp_species.name, NAME_SIZE * sizeof(char), 1, file);
   fread(temp_species.scientific_name, SCIENTIFIC_SIZE * sizeof(char), 1, file);
@@ -101,6 +88,83 @@ void searchSpecies(FILE *file){
   else printf("Impacto Humano: NULO\n");
 };
 
-void registerInfoSpecies(FILE *file){
-  printf("registerInfoSpecies");
-};
+void registerInfoSpecies(FILE *file){ 
+  Species temp_species;
+
+  int jump_size = sizeof(temp_species.species_id) + sizeof(temp_species.name) + sizeof(temp_species.scientific_name) + sizeof(temp_species.population) + sizeof(temp_species.status) + sizeof(temp_species.location) + sizeof(temp_species.human_impact);
+  
+  int target_id;
+  if(DEBUG == 1) printf("TARGET_ID: ");
+  scanf("%d", &target_id);
+  
+  fread(&temp_species.species_id, sizeof(int), 1, file);
+  fread(temp_species.name, NAME_SIZE * sizeof(char), 1, file);
+  fread(temp_species.scientific_name, SCIENTIFIC_SIZE * sizeof(char), 1, file);
+  fread(&temp_species.population, sizeof(int), 1, file);
+  fread(temp_species.status, STATUS_SIZE * sizeof(char), 1, file);
+  fread(&temp_species.location, sizeof(float), 2, file);
+  fread(&temp_species.human_impact, sizeof(int), 1, file);
+
+  while(temp_species.species_id != target_id && !feof(file)){
+    fread(&temp_species.species_id, sizeof(int), 1, file);
+    fread(temp_species.name, NAME_SIZE * sizeof(char), 1, file);
+    fread(temp_species.scientific_name, SCIENTIFIC_SIZE * sizeof(char), 1, file);
+    fread(&temp_species.population, sizeof(int), 1, file);
+    fread(temp_species.status, STATUS_SIZE * sizeof(char), 1, file);
+    fread(&temp_species.location, sizeof(float), 2, file);
+    fread(&temp_species.human_impact, sizeof(int), 1, file);
+  }
+  if(DEBUG == 1) printf("TEMP_SPECIES_ID: %d", temp_species.species_id);
+
+  int ttl_changes;
+  if(DEBUG == 1) printf("\nTTL_CHANGES: ");
+  scanf("%d", &ttl_changes);
+
+  char instruction[20];
+  int instruction_cmd;
+  int hi, population;
+  char status[STATUS_SIZE];
+  while(ttl_changes--){
+    if(DEBUG == 1) printf("INSTRUCTION: ");
+    readline(instruction);
+    if(strcmp(instruction,"STATUS") == 0){
+      instruction_cmd = 1;
+    }
+    if(strcmp(instruction,"HUMAN IMPACT") == 0){
+      instruction_cmd = 2;
+    }
+    if(strcmp(instruction,"POPULATION") == 0){
+      instruction_cmd = 3;
+    }
+    switch(instruction_cmd){
+      case(1):{
+		if(DEBUG == 1) printf("status: ");
+		readline(status);
+		break;
+	      }
+
+      case(2):{
+		if(DEBUG == 1) printf("hi: ");
+		scanf("%d", &hi);
+		break;
+	      }
+
+      case(3):{
+		if(DEBUG == 1) printf("population: ");
+		scanf("%d", &population);
+		break;
+	      }    
+    }
+
+    int current_pos = ftell(file);
+    fseek(file, current_pos - jump_size, SEEK_SET);
+    fwrite(&temp_species.species_id,sizeof(int),1,file);
+    fwrite(&temp_species.name,NAME_SIZE*sizeof(char),1,file);
+    fwrite(&temp_species.scientific_name,SCIENTIFIC_SIZE*sizeof(char),1,file);
+    fwrite(&population,sizeof(int),1,file);
+    fwrite(&status,STATUS_SIZE*sizeof(char),1,file);
+    fwrite(&temp_species.location[0],sizeof(float),1,file);
+    fwrite(&temp_species.location[1],sizeof(float),1,file);
+    fwrite(&hi,sizeof(int),1,file);
+  }
+};	
