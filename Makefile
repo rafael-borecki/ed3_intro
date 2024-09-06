@@ -5,7 +5,7 @@ SRC=main.c speciesRoutines.c funcoesFornecidas.c
 all: $(TARGET)
 
 $(TARGET): $(SRC)
-	$(CC) -o $(TARGET) $(SRC)
+	$(LD) -o $(TARGET) $(SRC)
 
 clean:
 	rm -f $(TARGET)

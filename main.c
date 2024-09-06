@@ -7,9 +7,11 @@
 int main(){
   int command;
   char filename[30];
-  scanf("%d", &command);
-  char dump_space = getchar();
-  readline(filename);
+  //scanf("%d", &command);	
+  //char dump_space = getchar();
+  //readline(filename);
+  scanf("%d %s", &command, filename); // intankavel
+  setbuf(stdin, NULL);
 
   switch(command){
     case(1):{
@@ -43,14 +45,14 @@ int main(){
 	      }
 
 	      fseek(file,0,SEEK_END);
-	      int file_end = ftell(file);
+	      long int file_end = ftell(file);
 	      fseek(file,0,SEEK_SET);
 
 	      while(file_end - ftell(file) > 130){
 		reportSpecies(file);
-		if(file_end - ftell(file) > 130){
+		//if(file_end - ftell(file) > 130){	// intankavel 2
 		  printf("\n");
-		}
+		//}
 	      }
 	      fclose(file);
 	      break;
