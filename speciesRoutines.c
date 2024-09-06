@@ -36,8 +36,9 @@ void reportSpecies(FILE *file){
   fread(temp_species.scientific_name, sizeof(char), SCIENTIFIC_SIZE, file);
   fread(&temp_species.population, sizeof(int), 1, file);
   fread(temp_species.status, sizeof(char), STATUS_SIZE, file);
-  fread(&temp_species.location[0], sizeof(float), 1, file);
-  fread(&temp_species.location[1], sizeof(float), 1, file);
+//fread(&temp_species.location[0], sizeof(float), 1, file);
+//fread(&temp_species.location[1], sizeof(float), 1, file);
+  fread(&temp_species.location, sizeof(float), 2, file);
   fread(&temp_species.human_impact, sizeof(int), 1, file);
 
   printf("ID:%d\n",temp_species.species_id);
@@ -51,7 +52,39 @@ void reportSpecies(FILE *file){
 };
 
 void searchSpecies(FILE *file){
-  printf("searchSpecies");
+  Species temp_species;
+  
+  int rrn;
+  scanf("%d", &rrn);
+  
+  if(fseek(file, rrn * sizeof(temp_species), SEEK_SET) != 0) {
+    printf("Espécie não encontrada\n");
+    return;
+  }
+  
+//if(fread(&temp_species, sizeof(temp_species), 1, file) != 1) {
+//  printf("Espécie não encontrada\n");
+//  return;
+//}
+
+  fread(&temp_species.species_id, sizeof(int), 1, file);
+  fread(temp_species.name, sizeof(char), NAME_SIZE, file);
+  fread(temp_species.scientific_name, sizeof(char), SCIENTIFIC_SIZE, file);
+  fread(&temp_species.population, sizeof(int), 1, file);
+  fread(temp_species.status, sizeof(char), STATUS_SIZE, file);
+//fread(&temp_species.location[0], sizeof(float), 1, file);
+//fread(&temp_species.location[1], sizeof(float), 1, file);
+  fread(&temp_species.location, sizeof(float), 2, file);
+  fread(&temp_species.human_impact, sizeof(int), 1, file);
+
+
+  printf("ID:%d\n",temp_species.species_id);
+  printf("Nome:%s\n",temp_species.name);
+  printf("Nome Científico:%s\n",temp_species.scientific_name);
+  printf("População:%d\n",temp_species.population);
+  printf("Status:%s\n",temp_species.status);
+  printf("Localização:(%.2f %.2f)\n",temp_species.location[0],temp_species.location[1]);
+  printf("Impacto Humano:%d\n\n",temp_species.human_impact);
 };
 
 void registerInfoSpecies(FILE *file){
