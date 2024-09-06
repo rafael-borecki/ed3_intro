@@ -22,7 +22,7 @@ typedef struct {
   int human_impact;
 } Species;
 
-void registerSpecies(FILE *file);
+void registerSpecies(FILE *file, int* idTracker, int *idCount);
 void reportSpecies(FILE *file);
 void searchSpecies(FILE *file);
 void registerInfoSpecies(FILE *file);

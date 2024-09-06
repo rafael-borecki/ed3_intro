@@ -7,10 +7,11 @@
 int main(){
   int command;
   char filename[30];
-  //scanf("%d", &command);	
+  scanf("%d", &command);
   //char dump_space = getchar();
   //readline(filename);
-  scanf("%d %s", &command, filename); // intankavel
+  scanf("%d %s", &command, filename);
+  scanf("%d %s", &command, filename);
   setbuf(stdin, NULL);
 
   switch(command){
@@ -22,8 +23,14 @@ int main(){
 		printf("Falha no processamento do arquivo");
 		return EXIT_FAILURE;
 	      }
+	      
+	      int idCount = 1;
+	      int *idTracker = (int*) malloc (n * sizeof(int));
+	      for(int i = 0; i < n; i++)
+		idTracker[i] = -1;
+	      
 	      for (int i = 0; i < n; i++){
-		registerSpecies(file);
+		registerSpecies(file, idTracker, &idCount);
 	      }
 	      fclose(file);
 
@@ -34,6 +41,7 @@ int main(){
 	      }
 	      binarioNaTela(filename);
 	      fclose(file);
+	      free(idTracker);
 	      break;
 	    }
 
@@ -50,9 +58,8 @@ int main(){
 
 	      while(file_end - ftell(file) > 130){
 		reportSpecies(file);
-		//if(file_end - ftell(file) > 130){	// intankavel 2
+		//if(file_end - ftell(file) > 130
 		  printf("\n");
-		//}
 	      }
 	      fclose(file);
 	      break;

@@ -1,7 +1,7 @@
 #include "./speciesRoutines.h"
 #include "./funcoesFornecidas.h"
 
-void registerSpecies(FILE *file){
+void registerSpecies(FILE *file, int *idTracker, int *idCount){
   Species temp_species;
   memset(&temp_species, '$', sizeof(temp_species));
 
@@ -12,19 +12,32 @@ void registerSpecies(FILE *file){
   readline(temp_species.status);
   scanf("%f %f", &temp_species.location[0], &temp_species.location[1]);
   scanf("%d", &temp_species.human_impact);
+  
+  int idUnique = 1;
+  for(int i = 0; i < *idCount; i++){
+    if(temp_species.species_id == idTracker[i]){
+      printf("Informação já inserida no arquivo\n");
+      idUnique = 0;
+      break;
+    }
+  }
+  
+  if(idUnique == 1){
+    idTracker[*idCount] = temp_species.species_id;
+    *idCount = *idCount + 1;
 
-  fwrite(&temp_species.species_id,sizeof(int),1,file);
-  fwrite(&temp_species.name,NAME_SIZE*sizeof(char),1,file);
-  fwrite(&temp_species.scientific_name,SCIENTIFIC_SIZE*sizeof(char),1,file);
-  fwrite(&temp_species.population,sizeof(int),1,file);
-  fwrite(&temp_species.status,STATUS_SIZE*sizeof(char),1,file);
-  fwrite(&temp_species.location[0],sizeof(float),1,file);
-  fwrite(&temp_species.location[1],sizeof(float),1,file);
-  fwrite(&temp_species.human_impact,sizeof(int),1,file);
+    fwrite(&temp_species.species_id,sizeof(int),1,file);
+    fwrite(&temp_species.name,NAME_SIZE*sizeof(char),1,file);
+    fwrite(&temp_species.scientific_name,SCIENTIFIC_SIZE*sizeof(char),1,file);
+    fwrite(&temp_species.population,sizeof(int),1,file);
+    fwrite(&temp_species.status,STATUS_SIZE*sizeof(char),1,file);
+    fwrite(&temp_species.location[0],sizeof(float),1,file);
+    fwrite(&temp_species.location[1],sizeof(float),1,file);
+    fwrite(&temp_species.human_impact,sizeof(int),1,file);
+  }
 };
 
 void reportSpecies(FILE *file){
-  //fflush(stdout);
   Species temp_species;
   fread(&temp_species.species_id, sizeof(int), 1, file);
   fread(temp_species.name, NAME_SIZE * sizeof(char), 1, file);
@@ -90,7 +103,7 @@ void searchSpecies(FILE *file){
 
 void registerInfoSpecies(FILE *file){ 
   Species temp_species;
-  
+
   int jump_size = sizeof(temp_species.species_id) + sizeof(temp_species.name) + sizeof(temp_species.scientific_name) + sizeof(temp_species.population) + sizeof(temp_species.status) + sizeof(temp_species.location) + sizeof(temp_species.human_impact);
 
   int target_id;
@@ -115,7 +128,7 @@ void registerInfoSpecies(FILE *file){
     fread(&temp_species.human_impact, sizeof(int), 1, file);
   }
   if(DEBUG == 1) printf("TEMP_SPECIES_ID: %d", temp_species.species_id);
-  
+
   if(temp_species.species_id != target_id){
     printf("Espécie não encontrada\n");
     return;
