@@ -65,6 +65,7 @@ int main(){
 		return EXIT_FAILURE;
 	      }
 	      searchSpecies(file);
+	      printf("\n");
 	      fclose(file);
 	      break;
 	    }

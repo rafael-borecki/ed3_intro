@@ -44,14 +44,11 @@ void reportSpecies(FILE *file){
   printf("ID: %d\n",temp_species.species_id);
   printf("Nome: %s\n",temp_species.name);
   printf("Nome Científico: %s\n",temp_species.scientific_name);
-
   if(temp_species.population)
     printf("População: %d\n",temp_species.population);
   else printf("População: NULO\n");
-
   printf("Status: %s\n",temp_species.status);
   printf("Localização: (%.2f, %.2f)\n",temp_species.location[0],temp_species.location[1]);
-
   if (temp_species.human_impact)
     printf("Impacto Humano: %d\n",temp_species.human_impact);
   else printf("Impacto Humano: NULO\n");
@@ -59,17 +56,27 @@ void reportSpecies(FILE *file){
 
 void searchSpecies(FILE *file){
   Species temp_species;
-
   int rrn;
   scanf("%d", &rrn);
+  int jump_size = sizeof(temp_species.species_id) + sizeof(temp_species.name) + sizeof(temp_species.scientific_name) + sizeof(temp_species.population) + sizeof(temp_species.status) + sizeof(temp_species.location) + sizeof(temp_species.human_impact);
 
-  if(fseek(file, rrn * sizeof(temp_species), SEEK_SET) != 0) {
-    printf("Espécie não encontrada\n");
+  fseek(file, 0, SEEK_END);
+  int max_jump = ftell(file) / jump_size;
+  fseek(file, 0, SEEK_SET);
+  
+  if(rrn > max_jump){
+    printf("Espécie não encontrada");
     return;
   }
 
+  if(fseek(file, rrn * jump_size, SEEK_SET) != 0) {
+    printf("Espécie não encontrada");
+    return;
+  }
+
+  //if (DEBUG == 1) printf("\nSIZEOF STRUCT: %d\n", sizeof(temp_species));
   //if(fread(&temp_species, sizeof(temp_species), 1, file) != 1) {
-  //  printf("Espécie não encontrada\n");
+  // printf("Espécie não encontrada\n");
   //  return;
   //}
 
@@ -78,19 +85,20 @@ void searchSpecies(FILE *file){
   fread(temp_species.scientific_name, SCIENTIFIC_SIZE * sizeof(char), 1, file);
   fread(&temp_species.population, sizeof(int), 1, file);
   fread(temp_species.status, STATUS_SIZE * sizeof(char), 1, file);
-  //fread(&temp_species.location[0], sizeof(float), 1, file);
-  //fread(&temp_species.location[1], sizeof(float), 1, file);
   fread(&temp_species.location, sizeof(float), 2, file);
   fread(&temp_species.human_impact, sizeof(int), 1, file);
 
-
-  printf("ID:%d\n",temp_species.species_id);
-  printf("Nome:%s\n",temp_species.name);
-  printf("Nome Científico:%s\n",temp_species.scientific_name);
-  printf("População:%d\n",temp_species.population);
-  printf("Status:%s\n",temp_species.status);
-  printf("Localização:(%.2f %.2f)\n",temp_species.location[0],temp_species.location[1]);
-  printf("Impacto Humano:%d\n\n",temp_species.human_impact);
+  printf("ID: %d\n",temp_species.species_id);
+  printf("Nome: %s\n",temp_species.name);
+  printf("Nome Científico: %s\n",temp_species.scientific_name);
+  if(temp_species.population)
+    printf("População: %d\n",temp_species.population);
+  else printf("População: NULO\n");
+  printf("Status: %s\n",temp_species.status);
+  printf("Localização: (%.2f, %.2f)\n",temp_species.location[0],temp_species.location[1]);
+  if (temp_species.human_impact)
+    printf("Impacto Humano: %d\n",temp_species.human_impact);
+  else printf("Impacto Humano: NULO\n");
 };
 
 void registerInfoSpecies(FILE *file){
