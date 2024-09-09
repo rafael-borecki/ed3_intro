@@ -1,6 +1,18 @@
 #include "./speciesRoutines.h"
 #include "./funcoesFornecidas.h"
 
+
+/* 
+ * registerSpecies (COMANDO 1)
+ *
+ * Registra uma espécie a partir do teclado(stdin) no arquivo binário "filename".
+ *
+ * Antes de adicionar a espécie ao arquivo, verifica se o ID dela é unico.
+ * Se não existir, adiciona a espécie normalmente no arquivo "filename".
+ * Se existir o ID, não registra a espécie no arquivo e pula para a próxima
+ * entrada do teclado.
+ */
+
 void registerSpecies(FILE *file, int *idTracker, int *idCount){
   Species temp_species;
   memset(&temp_species, '$', sizeof(temp_species));
@@ -37,6 +49,13 @@ void registerSpecies(FILE *file, int *idTracker, int *idCount){
   }
 };
 
+
+/* reportSpecies (COMANDO 2)
+ *
+ * Dada uma certa posição do ponteiro file, imprime na tela todo
+ * o registro da espécie.
+ */
+
 void reportSpecies(FILE *file){
   Species temp_species;
   fread(&temp_species.species_id, sizeof(int), 1, file);
@@ -59,6 +78,14 @@ void reportSpecies(FILE *file){
     printf("Impacto Humano: %d\n",temp_species.human_impact);
   else printf("Impacto Humano: NULO\n");
 };
+
+/* 
+ * searchSpeciesRRN (COMANDO 3)
+ *
+ * Dado um RRN, procura o registro que ocupa o RRN passado.
+ *
+ * Caso o RRN seja invalido, o procedimento é encerrado.
+ */
 
 void searchSpecies(FILE *file){
   Species temp_species;
@@ -101,11 +128,20 @@ void searchSpecies(FILE *file){
   else printf("Impacto Humano: NULO\n");
 };
 
+/* 
+ * registerInfoSpecies (COMANDO 4)
+ *
+ *  Pede um ID, o número n de informações a serem modificadas.
+ *  Para cada n, lê-se uma instrução e o dado referente
+ */
+
 void registerInfoSpecies(FILE *file){ 
   Species temp_species;
 
   int jump_size = sizeof(temp_species.species_id) + sizeof(temp_species.name) + sizeof(temp_species.scientific_name) + sizeof(temp_species.population) + sizeof(temp_species.status) + sizeof(temp_species.location) + sizeof(temp_species.human_impact);
 
+
+  // leitura do ID do comando
   int target_id;
   if(DEBUG == 1) printf("TARGET_ID: ");
   scanf("%d", &target_id);
@@ -134,6 +170,7 @@ void registerInfoSpecies(FILE *file){
     return;
   }
 
+  // lê quantidade de informações
   int ttl_changes;
   if(DEBUG == 1) printf("\nTTL_CHANGES: ");
   scanf("%d", &ttl_changes);
@@ -191,6 +228,7 @@ void registerInfoSpecies(FILE *file){
 	      }    
     }
 
+    // escrita dos dados no arquivo
     int current_pos = ftell(file);
     fseek(file, current_pos - jump_size, SEEK_SET);
 
