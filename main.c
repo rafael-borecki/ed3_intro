@@ -7,12 +7,11 @@
 int main(){
   int command;
   char filename[30];
-  scanf("%d", &command);
+  //scanf("%d", &command);
   //char dump_space = getchar();
-  //readline(filename);	
+  //readline(filename);
   scanf("%d %s", &command, filename);	//RUNCODES
-  scanf("%d %s", &command, filename);
-  setbuf(stdin, NULL);
+  //setbuf(stdin, NULL);
 
   switch(command){
     case(1):{
@@ -25,7 +24,7 @@ int main(){
 	      }
 	      
 	      int idCount = 1;
-	      int *idTracker = (int*) malloc (n * sizeof(int));
+	      int *idTracker = (int*) malloc (n * sizeof(int) + 10 * sizeof(int));
 	      for(int i = 0; i < n; i++)
 		idTracker[i] = -1;
 	      
